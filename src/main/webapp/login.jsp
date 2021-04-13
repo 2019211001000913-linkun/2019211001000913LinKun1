@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: ASUS
+  Date: 2021/4/6
+  Time: 21:05
+  To change this template use File | Settings | File Templates.
+--%>
 <%@include file="header.jsp"%>
 <h1>Welcome to My Online Shop Home Page</h1>
 <form method="get" target="_blank" action="search">

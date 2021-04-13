@@ -1,4 +1,5 @@
 package com.linkun.week5.demo;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -14,30 +15,32 @@ import java.sql.*;
 public class LoginServlet extends HttpServlet {
     //开始连接数据库
     Connection con=null;
-    String driver;
-    String url;
-    String username;
-    String password;
+    //    String driver;
+//    String url;
+//    String username;
+//    String password;
     @Override
     public void init() throws ServletException {
-        ServletContext context=this.getServletContext();
-        driver = context.getInitParameter("driver");
-        url = context.getInitParameter("url");
-        username = context.getInitParameter("username");
-        password = context.getInitParameter("password");
-
-        try{
-            Class.forName(driver);
-            con = DriverManager.getConnection(url, username, password);
-            System.out.println("进入数据库init()-->"+con);//连接数据库成功
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+//        ServletContext context=this.getServletContext();
+//        driver = context.getInitParameter("driver");
+//        url = context.getInitParameter("url");
+//        username = context.getInitParameter("username");
+//        password = context.getInitParameter("password");
+//
+//        try{
+//            Class.forName(driver);
+//            con = DriverManager.getConnection(url, username, password);
+//            System.out.println("进入数据库init()-->"+con);//连接数据库成功
+//        } catch (ClassNotFoundException | SQLException e) {
+//            e.printStackTrace();
+//        }
+        con = (Connection) getServletContext().getAttribute("con");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        doPost(request,response);
     }
 
     @Override
@@ -61,10 +64,19 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = st.executeQuery(user);
 
             if (rs.next()){
-                writer.println("Login Success!!!</br>");
-                writer.println("Welcome"+username);
+//                writer.println("Login Success!!!</br>");
+//                writer.println("Welcome"+username);
+                request.setAttribute("id",rs.getInt("id"));
+                request.setAttribute("username",rs.getString("username"));
+                request.setAttribute("password",rs.getString("password"));
+                request.setAttribute("email",rs.getString("email"));
+                request.setAttribute("gender",rs.getString("gender"));
+                request.setAttribute("birthDate",rs.getString("birthDate"));
+                request.getRequestDispatcher("userInfo.jsp").forward(request,response);
             }else {
-                writer.println("Username or Password error");
+//                writer.println("Username or Password error");
+                request.setAttribute("message","Username or Password error!!");
+                request.getRequestDispatcher("login.jsp").forward(request,response);
             }
 
 
