@@ -13,14 +13,16 @@ public class SearchServlet extends HttpServlet {
         String txt = request.getParameter("txt");
         String search = request.getParameter("search");
 
-        if(txt==null){
+        if(txt.equals("")){
             response.sendRedirect("index.jsp");
-        }else if(search.equals("baidu")){
-            response.sendRedirect("https://www.baidu.com/s?wd=1"+txt);
-        }else if (search.equals("bing")){
-            response.sendRedirect("https://www.bing.com/search?q="+txt);
-        }else if (search.equals("google")){
-            response.sendRedirect("https://www.google.com/search?q="+txt);
+        }else {
+            if(search.equals("baidu")){
+                response.sendRedirect("https://www.baidu.com/s?wd=1"+txt);
+            } if (search.equals("bing")){
+                response.sendRedirect("https://www.bing.com/search?q="+txt);
+            } if (search.equals("google")){
+                response.sendRedirect("https://www.google.com/search?q="+txt);
+            }
         }
     }
 

@@ -1,5 +1,8 @@
 package com.linkun.week5.demo;
 
+import com.linkun.dao.UserDao;
+import com.linkun.model.User;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -40,7 +43,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        doPost(request,response);
+        request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request,response);
     }
 
     @Override
@@ -48,50 +51,64 @@ public class LoginServlet extends HttpServlet {
         String username=request.getParameter("username");
         String password=request.getParameter("password");
 
+        UserDao userDao=new UserDao();
+        try {
+            User user =userDao.findByUsernamePassword(con,username,password);
+            if (user!=null){
+                request.setAttribute("user",user);
+                request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
+            }else {
+                request.setAttribute("message","Username or Password Error !!!");
+                request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request,response);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         response.setContentType("text/html");
         PrintWriter writer = response.getWriter();
-        try {
+//        try {
 
 //            HttpSession hs = request.getSession(true);
 //            Statement createDbStatement = con.createStatement();
 
 //            String user = "select * from usertable where username='xxx' and password='xxx'";
 //            ResultSet rs = createDbStatement.executeQuery(user);
-            Statement st = con.createStatement();
-//          定义sql语句
-            String user = "select * from usertable where username=" + "'" + username + "'" + "and password='" + password + "'";
-//          使用resultset接受返回数据
-            ResultSet rs = st.executeQuery(user);
-
-            if (rs.next()){
-//                writer.println("Login Success!!!</br>");
-//                writer.println("Welcome"+username);
-                request.setAttribute("id",rs.getInt("id"));
-                request.setAttribute("username",rs.getString("username"));
-                request.setAttribute("password",rs.getString("password"));
-                request.setAttribute("email",rs.getString("email"));
-                request.setAttribute("gender",rs.getString("gender"));
-                request.setAttribute("birthDate",rs.getString("birthDate"));
-                request.getRequestDispatcher("userInfo.jsp").forward(request,response);
-            }else {
-//                writer.println("Username or Password error");
-                request.setAttribute("message","Username or Password error!!");
-                request.getRequestDispatcher("login.jsp").forward(request,response);
-            }
-
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+//            Statement st = con.createStatement();
+////          定义sql语句
+//            String user = "select * from usertable where username=" + "'" + username + "'" + "and password='" + password + "'";
+////          使用resultset接受返回数据
+//            ResultSet rs = st.executeQuery(user);
+//
+//            if (rs.next()){
+////                writer.println("Login Success!!!</br>");
+////                writer.println("Welcome"+username);
+//                request.setAttribute("id",rs.getInt("id"));
+//                request.setAttribute("username",rs.getString("username"));
+//                request.setAttribute("password",rs.getString("password"));
+//                request.setAttribute("email",rs.getString("email"));
+//                request.setAttribute("gender",rs.getString("gender"));
+//                request.setAttribute("birthDate",rs.getString("birthDate"));
+//                request.getRequestDispatcher("userInfo.jsp").forward(request,response);
+//            }else {
+////                writer.println("Username or Password error");
+//                request.setAttribute("message","Username or Password error!!");
+//                request.getRequestDispatcher("login.jsp").forward(request,response);
+//            }
+//
+//
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-        try {
-            con.close();//当tomcat停止时释放内存
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
+
+//    public void destroy() {
+//        super.destroy();
+//        try {
+//            con.close();//当tomcat停止时释放内存
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//    }
 }
