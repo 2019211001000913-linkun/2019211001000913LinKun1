@@ -55,7 +55,29 @@ public class LoginServlet extends HttpServlet {
         try {
             User user =userDao.findByUsernamePassword(con,username,password);
             if (user!=null){
-                request.setAttribute("user",user);
+                String RememberMe=request.getParameter("RememberMe");
+                if(RememberMe!=null && RememberMe.equals("1")){
+                    Cookie usernameCookie =new Cookie("cUsername", user.getUsername());
+                    Cookie passwordCookie =new Cookie("cPassword", user.getPassword());
+                    Cookie RememberMeCookie =new Cookie("cRememberMe",RememberMe);
+
+                    usernameCookie.setMaxAge(5);
+                    passwordCookie.setMaxAge(5);
+                    RememberMeCookie.setMaxAge(5);
+
+                    response.addCookie(usernameCookie);
+                    response.addCookie(passwordCookie);
+                    response.addCookie(RememberMeCookie);
+                }
+
+                HttpSession session=request.getSession();
+                System.out.println("session id--->"+session.getId());
+                session.setMaxInactiveInterval(10);
+//                Cookie c=new Cookie("sessionid",""+user.getId());
+//                c.setMaxAge(10*60);
+//                response.addCookie(c);
+
+                session.setAttribute("user",user);
                 request.getRequestDispatcher("WEB-INF/views/userInfo.jsp").forward(request,response);
             }else {
                 request.setAttribute("message","Username or Password Error !!!");
@@ -89,7 +111,7 @@ public class LoginServlet extends HttpServlet {
 //                request.setAttribute("email",rs.getString("email"));
 //                request.setAttribute("gender",rs.getString("gender"));
 //                request.setAttribute("birthDate",rs.getString("birthDate"));
-//                request.getRequestDispatcher("userInfo.jsp").forward(request,response);
+//                request.getRequestDispatcher("").forward(request,response);
 //            }else {
 ////                writer.println("Username or Password error");
 //                request.setAttribute("message","Username or Password error!!");
