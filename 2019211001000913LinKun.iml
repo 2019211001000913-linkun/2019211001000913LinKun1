@@ -29,7 +29,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Lib" level="project" />
-    <orderEntry type="library" name="mssql-jdbc-9.2.1.jre15" level="project" />
+    <orderEntry type="library" exported="" name="mssql-jdbc-9.2.1.jre15" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ivy:ivy:2.5.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:javax.servlet-api:4.0.1" level="project" />
